@@ -18,9 +18,38 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			<!---start-content---->
 			<div class="content">
 				<h1>Our website is Under Construction</h1>
-				<p>We'll be here soon with a new website.</p>
+				<p>We'll be here soon with a new website. Estimated Time Remaining...</p>
 			</div>
 			<!---End-content---->
+			<!---start-countdown-timer----->
+				<ul id="countdown">
+					<li class="frist">
+						<span class="days">479</span>
+						<h3>Days</h3>
+					</li>
+					<li class="second">
+						<span class="hours">02</span>
+						<h3>hours</h3>
+					</li>
+					<li class="three">
+						<span class="minutes">00</span>
+						<h3>minutes</h3>
+					</li>
+					<li class="four">
+						<span class="seconds">53</span>
+						<h3>seconds</h3>
+					</li>	
+				</ul>
+				<div class="clear"> </div>
+				<!---End-countdown-timer----->
+				<!---start-notified----->
+				<div class="notified">
+					<form>
+						<input type="text" class="textbox" value="Email:" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Email';}">
+						<input type="submit" value="Submit" />
+					</form>
+				</div>
+				<!---End-notified----->
 
 				<!---start-copy-right----->
 				<div class="copy-right">

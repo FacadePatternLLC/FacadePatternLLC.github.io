@@ -1,250 +1,1822 @@
 <!DOCTYPE html>
-<html class="no-js">
-  <head>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Facade Pattern — IT Management, Cybersecurity & AI Automation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & Variables ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    <meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Facade Pattern</title>
-<meta name="description" content="">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+    :root {
+      --navy:    #080d1a;
+      --deep:    #0b1120;
+      --surface: #0f1928;
+      --panel:   #121e30;
+      --border:  rgba(0,220,255,0.12);
+      --cyan:    #00dcff;
+      --cyan2:   #0099cc;
+      --gold:    #f0b429;
+      --text:    #d8e8f0;
+      --muted:   #6a8a9f;
+      --white:   #ffffff;
+      --font-display: 'Syne', sans-serif;
+      --font-body:    'DM Sans', sans-serif;
+    }
 
-<!-- theme meta -->
-<meta name="theme-name" content="airspace-jekyll" />
+    html {
+      /* scroll-snap-type: y mandatory;
+      overflow-y: scroll; */
+      scroll-behavior: smooth;
+    }
 
-<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    body {
+      background: var(--navy);
+      color: var(--text);
+      font-family: var(--font-body);
+      line-height: 1.6;
+    }
 
-<!-- CSS -->
-<link rel="stylesheet" href="/css/owl.carousel.css" />
-<link rel="stylesheet" href="/css/bootstrap.min.css" />
-<link rel="stylesheet" href="/css/font-awesome.min.css" />
-<link rel="stylesheet" href="/css/airspace.css" />
-<link rel="stylesheet" href="/css/style.css" />
-<link rel="stylesheet" href="/css/ionicons.min.css" />
-<link rel="stylesheet" href="/css/animate.css" />
-<link rel="stylesheet" href="/css/responsive.css" />
-<link rel="stylesheet" href="/css/syntax.css" />
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--navy); }
+    ::-webkit-scrollbar-thumb { background: var(--cyan2); border-radius: 2px; }
 
-<!-- Js -->
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
-<script src="/js/bootstrap.min.js"></script>
-<script src="/js/owl.carousel.min.js"></script>
-<script src="/js/plugins.js"></script>
-<script src="/js/min/waypoints.min.js"></script>
-<script src="/js/jquery.counterup.js"></script>
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 4rem;
+      background: linear-gradient(180deg, rgba(8,13,26,0.95) 0%, rgba(8,13,26,0) 100%);
+      backdrop-filter: blur(4px);
+      transition: background 0.3s;
+    }
 
+    nav.scrolled {
+      background: rgba(8,13,26,0.97);
+      border-bottom: 1px solid var(--border);
+    }
 
-<script src="/js/main.js"></script>
+    .logo {
+      /* font-family: var(--font-display); */
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      text-decoration: none;
+    }
 
-<!--
-/*
- * Airspace
- * Ported to Jekyll by Andrew Lee
- * https://github.com/ndrewtl/airspace-jekyll
- * Designed and Developed by ThemeFisher
- * https://themefisher.com/
- *
- */
--->
+    .logo span { color: var(--cyan); }
 
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
 
-  </head>
-  <body>
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
 
+    .nav-links a:hover { color: var(--cyan); }
 
-    <!-- Header Start -->
-<header>
-<div class="container">
-  <div class="row">
-    <div class="col-md-12">
-      <!-- header Nav Start -->
-      <nav class="navbar navbar-default">
-        <div class="container-fluid">
-          <!-- Brand and toggle get grouped for better mobile display -->
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="index.html">
-              <img src="/img/logo.png" alt="Logo">
-            </a>
+    .nav-cta {
+      background: transparent;
+      border: 1px solid var(--cyan);
+      color: var(--cyan) !important;
+      padding: 0.5rem 1.25rem;
+      border-radius: 2px;
+      transition: background 0.2s, color 0.2s !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--cyan) !important;
+      color: var(--navy) !important;
+    }
+
+    /* ── SECTIONS — Snap ── */
+    section {
+      /* scroll-snap-align: start; */
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      justify-content: center;
+      text-align: center;
+      flex-direction: column;
+      /* Offset fixed nav so eyebrow/headline are never hidden beneath it */
+      padding-top: 76px;
+    }
+
+    .hero-video-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .hero-video-bg video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.35;
+    }
+
+    /* Fallback gradient if no video file */
+    .hero-video-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      /*
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 40%, rgba(0,100,140,0.35) 0%, transparent 70%),
+        linear-gradient(180deg, var(--navy) 0%, #0a1830 100%);
+      background: transparent;
+      z-index: 1;
+      */
+      
+      background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(0,100,140,0.35) 0%, transparent 70%);
+      z-index: 0;  /* ← behind the video, not on top */
+    }
+
+    .hero-video-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg,
+        rgba(8,13,26,0.3) 0%,
+        rgba(8,13,26,0.1) 40%,
+        rgba(8,13,26,0.6) 80%,
+        rgba(8,13,26,1) 100%);
+      z-index: 2;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      max-width: 900px;
+      padding: 0 2rem;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.3s forwards;
+    }
+
+    .hero-eyebrow::before, .hero-eyebrow::after {
+      content: '';
+      display: block;
+      width: 2rem;
+      height: 1px;
+      background: var(--cyan);
+      opacity: 0.5;
+    }
+
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      color: var(--white);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.5s forwards;
+    }
+
+    h1 em {
+      font-style: normal;
+      color: var(--cyan);
+    }
+
+    .hero-sub {
+      font-size: 1.125rem;
+      font-weight: 300;
+      color: var(--muted);
+      max-width: 580px;
+      margin: 0 auto 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.7s forwards;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.9s forwards;
+    }
+
+    .btn-primary {
+      background: var(--cyan);
+      color: var(--navy);
+      padding: 0.875rem 2rem;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.875rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,220,255,0.3);
+    }
+
+    .btn-ghost {
+      border: 1px solid rgba(216,232,240,0.25);
+      color: var(--text);
+      padding: 0.875rem 2rem;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 0.875rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0;
+      animation: fadeIn 1s 1.5s forwards;
+    }
+
+    .scroll-hint span {
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(180deg, var(--cyan) 0%, transparent 100%);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    /* ── GRID SECTIONS ── */
+    .split-section {
+      padding: 0 4rem;
+      width: 100%;
+    }
+
+    .split-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .split-inner.reverse { direction: rtl; }
+    .split-inner.reverse > * { direction: ltr; }
+
+    .section-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      border: 1px solid var(--border);
+      padding: 0.3rem 0.75rem;
+      border-radius: 1px;
+      margin-bottom: 1.25rem;
+      background: rgba(0,220,255,0.04);
+    }
+
+    h2 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      color: var(--white);
+      margin-bottom: 1.25rem;
+    }
+
+    h2 em {
+      font-style: normal;
+      color: var(--cyan);
+    }
+
+    .section-body {
+      color: var(--muted);
+      font-size: 1rem;
+      font-weight: 300;
+      line-height: 1.75;
+      margin-bottom: 2rem;
+    }
+
+    .feature-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+
+    .feature-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 0.9375rem;
+      color: var(--text);
+    }
+
+    .feature-list li::before {
+      content: '→';
+      color: var(--cyan);
+      font-size: 0.85rem;
+      margin-top: 0.15rem;
+      flex-shrink: 0;
+    }
+
+    /* ── Media Panel ── */
+    .media-panel {
+      position: relative;
+      border-radius: 4px;
+      overflow: hidden;
+      aspect-ratio: 4/3;
+      background: var(--panel);
+      border: 1px solid var(--border);
+    }
+
+    .media-panel video,
+    .media-panel img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .media-panel::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(0,220,255,0.06) 0%, transparent 60%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Corner accents */
+    .media-panel::after {
+      content: '';
+      position: absolute;
+      top: -1px; left: -1px;
+      width: 40px; height: 40px;
+      border-top: 2px solid var(--cyan);
+      border-left: 2px solid var(--cyan);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .media-corner-br {
+      position: absolute;
+      bottom: -1px; right: -1px;
+      width: 40px; height: 40px;
+      border-bottom: 2px solid var(--cyan);
+      border-right: 2px solid var(--cyan);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* ── Placeholder Visuals ── */
+    .placeholder-visual {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--panel);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .placeholder-visual svg {
+      width: 80px;
+      height: 80px;
+      opacity: 0.2;
+    }
+
+    .grid-lines {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,220,255,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,220,255,0.05) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+
+    /* ── SERVICES SECTION ── */
+    #services {
+      flex-direction: column;
+      justify-content: center;
+      background: var(--deep);
+    }
+
+    .services-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 4rem;
+      width: 100%;
+    }
+
+    .services-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .service-card {
+      background: var(--surface);
+      padding: 2.5rem 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .service-card:hover { background: var(--panel); }
+    .service-card:hover::before { opacity: 1; }
+
+    .service-number {
+      font-family: var(--font-display);
+      font-size: 3.5rem;
+      font-weight: 800;
+      color: rgba(0,220,255,0.06);
+      line-height: 1;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.04em;
+    }
+
+    .service-icon {
+      width: 44px;
+      height: 44px;
+      margin-bottom: 1.25rem;
+      color: var(--cyan);
+    }
+
+    .service-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.01em;
+    }
+
+    .service-card p {
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* ── WHY US ── */
+    #why {
+      background: var(--navy);
+    }
+
+    /* ── AI SECTION ── */
+    #ai {
+      background: var(--deep);
+    }
+
+    /* ── CONTACT SECTION ── */
+    #contact {
+      flex-direction: column;
+      justify-content: center;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+    }
+
+    .contact-inner {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      text-align: center;
+      width: 100%;
+    }
+
+    .contact-inner h2 { font-size: clamp(2rem, 4vw, 2.8rem); margin-bottom: 1rem; }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 2.5rem;
+      text-align: left;
+    }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .form-group label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.75rem 1rem;
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
+      border-radius: 2px;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--cyan);
+    }
+
+    .form-group select option { background: var(--panel); }
+    .form-group textarea { resize: vertical; min-height: 100px; }
+
+    .form-submit {
+      margin-top: 0.5rem;
+    }
+
+    .form-submit .btn-primary {
+      width: 100%;
+      text-align: center;
+      display: block;
+      cursor: pointer;
+      border: none;
+      font-size: 0.875rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      /* scroll-snap-align: start; */
+      background: var(--navy);
+      border-top: 1px solid var(--border);
+      padding: 4rem 4rem 2.5rem;
+    }
+
+    .footer-grid {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 3rem;
+      padding-bottom: 3rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+
+    .footer-brand .logo { display: block; margin-bottom: 1rem; }
+
+    .footer-brand p {
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 280px;
+    }
+
+    .footer-col h4 {
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--white);
+      margin-bottom: 1.25rem;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .footer-col ul li a {
+      font-size: 0.875rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-col ul li a:hover { color: var(--cyan); }
+
+    .footer-bottom {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-bottom p {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .footer-legal {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .footer-legal a {
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-legal a:hover { color: var(--text); }
+
+    /* ── STATS BAR ── */
+    .stats-bar {
+      display: flex;
+      gap: 3rem;
+      margin-top: 2.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .stat-item { display: flex; flex-direction: column; gap: 0.2rem; }
+
+    .stat-number {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -0.03em;
+    }
+
+    .stat-number span { color: var(--cyan); }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(1); }
+      50%       { opacity: 1;   transform: scaleY(1.1); }
+    }
+
+    /* Reveal on scroll */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ── Responsive ── */
+    @media (max-width: 1024px) {
+      nav { padding: 1.25rem 2rem; }
+      .split-section { padding: 4rem 2rem; }
+      .split-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .split-inner.reverse { direction: ltr; }
+      .media-panel { aspect-ratio: 16/9; }
+      .services-grid { grid-template-columns: 1fr; }
+      .services-inner { padding: 4rem 2rem; }
+      .footer-grid { grid-template-columns: 1fr 1fr; padding: 2rem; }
+      footer { padding: 2rem; }
+    }
+
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .form-row { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .stats-bar { flex-wrap: wrap; gap: 1.5rem; }
+      /* Smaller nav on mobile = less offset needed */
+      #hero { padding-top: 64px; }
+    }
+
+    /* ══════════════════════════════════
+       MODAL SYSTEM
+    ══════════════════════════════════ */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      background: rgba(8,13,26,0.85);
+      backdrop-filter: blur(6px);
+      align-items: flex-start;
+      justify-content: center;
+      padding: 2rem 1rem;
+      overflow-y: auto;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: 2px solid var(--cyan);
+      width: 100%;
+      max-width: 760px;
+      margin: auto;
+      position: relative;
+      border-radius: 2px;
+      animation: modalIn 0.25s ease;
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Corner accent */
+    .modal::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; right: -1px;
+      width: 28px; height: 28px;
+      border-bottom: 2px solid var(--cyan);
+      border-right: 1px solid var(--border);
+      pointer-events: none;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.75rem 2rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--panel);
+    }
+
+    .modal-header-text {}
+
+    .modal-badge {
+      display: inline-block;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      border: 1px solid var(--border);
+      padding: 0.2rem 0.6rem;
+      margin-bottom: 0.5rem;
+      background: rgba(0,220,255,0.04);
+    }
+
+    .modal-title {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .modal-meta {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.35rem;
+    }
+
+    .modal-close {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: border-color 0.2s, color 0.2s;
+      border-radius: 1px;
+      margin-top: 4px;
+    }
+
+    .modal-close:hover { border-color: var(--cyan); color: var(--cyan); }
+
+    .modal-body {
+      padding: 2rem;
+      max-height: 65vh;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+    }
+
+    .modal-body::-webkit-scrollbar { width: 3px; }
+    .modal-body::-webkit-scrollbar-track { background: var(--panel); }
+    .modal-body::-webkit-scrollbar-thumb { background: var(--cyan2); }
+
+    /* Modal TOC */
+    .modal-toc {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.75rem;
+      border-left: 2px solid var(--cyan);
+    }
+
+    .modal-toc-title {
+      font-family: var(--font-display);
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 0.6rem;
+    }
+
+    .modal-toc ol { padding-left: 1.1rem; }
+    .modal-toc li { margin-bottom: 0.2rem; }
+    .modal-toc a { font-size: 0.82rem; color: var(--muted); text-decoration: none; transition: color 0.15s; }
+    .modal-toc a:hover { color: var(--cyan); }
+
+    /* Modal sections */
+    .modal-section { margin-bottom: 1.75rem; }
+
+    .modal-section-title {
+      font-family: var(--font-display);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 0.65rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-section p {
+      font-size: 0.875rem;
+      color: var(--text);
+      line-height: 1.75;
+      margin-bottom: 0.75rem;
+    }
+
+    .modal-section p:last-child { margin-bottom: 0; }
+
+    .modal-section ul, .modal-section ol {
+      padding-left: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .modal-section li {
+      font-size: 0.875rem;
+      color: var(--text);
+      margin-bottom: 0.3rem;
+      line-height: 1.65;
+    }
+
+    .modal-section li::marker { color: var(--cyan); }
+    .modal-section strong { color: var(--white); font-weight: 500; }
+
+    .modal-highlight {
+      background: rgba(0,220,255,0.04);
+      border-left: 2px solid var(--cyan);
+      padding: 0.75rem 1rem;
+      margin: 0.75rem 0;
+      font-size: 0.85rem;
+      color: var(--text);
+      line-height: 1.65;
+    }
+
+    .modal-highlight strong { color: var(--cyan); }
+
+    .modal-footer {
+      padding: 1rem 2rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .modal-footer p { font-size: 0.75rem; color: var(--muted); }
+
+    .modal-footer .btn-primary {
+      font-size: 0.8rem;
+      padding: 0.6rem 1.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAV ── -->
+  <nav id="main-nav">
+    <a href="#hero" class="logo">Facade<span>Pattern</span></a>
+    <ul class="nav-links">
+      <li><a href="#it-management">IT Management</a></li>
+      <li><a href="#cybersecurity">Cybersecurity</a></li>
+      <li><a href="#ai">AI &amp; Automation</a></li>
+      <li><a href="#why">Why Us</a></li>
+      <li><a href="#contact" class="nav-cta">Get Started</a></li>
+    </ul>
+  </nav>
+
+  <!-- ════════════════════════════
+       SECTION 1 — HERO
+  ════════════════════════════ -->
+  <section id="hero">
+    <div class="hero-video-bg">
+      <!--
+        Replace the src below with your actual video file.
+        Example: src="assets/hero-bg.mp4"
+        Supported formats: MP4 (H.264), WebM
+      -->
+      <video autoplay muted loop playsinline poster="assets/hero-poster.jpg">
+        <source src="assets/hero-bg.mp4" type="video/mp4" />
+        <source src="assets/hero-bg.webm" type="video/webm" />
+      </video>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-eyebrow">Trusted Technology Partner</div>
+      <h1>Built for Businesses<br />That Can't Afford to<br /><em>Stand Still</em></h1>
+      <p class="hero-sub">
+        Facade Pattern delivers enterprise-grade IT management, cybersecurity, and AI automation — purpose-built for small and midsize companies ready to operate smarter.
+      </p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary">Schedule a Consultation</a>
+        <a href="#it-management" class="btn-ghost">Explore Services</a>
+      </div>
+
+      <!-- hide for now -->
+      <!--
+      <div class="stats-bar">
+        <div class="stat-item">
+          <div class="stat-number">200<span>+</span></div>
+          <div class="stat-label">Clients Served</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">99.<span>9%</span></div>
+          <div class="stat-label">Uptime SLA</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">24<span>/7</span></div>
+          <div class="stat-label">Monitoring</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">15<span>min</span></div>
+          <div class="stat-label">Avg. Response</div>
+        </div>
+      </div>
+      -->
+    </div>
+
+    <div class="scroll-hint">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════
+       SECTION 2 — IT MANAGEMENT
+  ════════════════════════════ -->
+  <section id="it-management">
+    <div class="split-section">
+      <div class="split-inner">
+        <div class="split-text">
+          <div class="section-tag reveal">IT Management</div>
+          <h2 class="reveal reveal-delay-1">Your Infrastructure,<br /><em>Always On.</em></h2>
+          <p class="section-body reveal reveal-delay-2">
+            We take full ownership of your IT environment — from help desk to hardware procurement. Our proactive managed services model means issues are resolved before your team even notices them.
+          </p>
+          <ul class="feature-list reveal reveal-delay-2">
+            <li>Managed help desk &amp; end-user support</li>
+            <li>Network design, monitoring &amp; optimization</li>
+            <li>Cloud infrastructure (Microsoft 365, Azure, AWS)</li>
+            <li>Backup, disaster recovery &amp; business continuity</li>
+            <li>Vendor management &amp; procurement advisory</li>
+          </ul>
+          <a href="#contact" class="btn-primary reveal reveal-delay-3">Talk to an Engineer</a>
+        </div>
+
+        <div class="media-panel reveal reveal-delay-2">
+          <!--
+            Replace with: <img src="assets/it-management.jpg" alt="IT Management" />
+            Or:           <video autoplay muted loop playsinline src="assets/it-management.mp4"></video>
+          -->
+          <div class="placeholder-visual">
+            <div class="grid-lines"></div>
+            <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="8" y="20" width="64" height="44" rx="3" stroke="currentColor" stroke-width="2.5"/>
+              <line x1="8" y1="32" x2="72" y2="32" stroke="currentColor" stroke-width="2.5"/>
+              <circle cx="16" cy="26" r="2.5" fill="currentColor"/>
+              <circle cx="24" cy="26" r="2.5" fill="currentColor"/>
+              <rect x="16" y="40" width="20" height="16" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+              <rect x="44" y="40" width="20" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/>
+              <rect x="44" y="50" width="20" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
           </div>
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-              <ul class="nav navbar-nav navbar-right">
-                <li><a href="/">Home</a></li>
-                <li><a href="#feature">Work</a></li>
-                <li><a href="#service">Services</a></li>
-                <li><a href="#contact">Contact</a></li>
-              </ul>
-            </div><!-- /.navbar-collapse -->
-          </div><!-- /.container-fluid -->
-        </nav>
-      </div>
-    </div>
-  </div>
-</header><!-- header close -->
-
-
-
-    <!-- Slider Start -->
-<section id="slider">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-10 col-md-offset-2">
-        <div class="block">
-          <h1 class="animated fadeInUp">Safeguard Your Digital Assets</h1>
-          <p class="animated fadeInUp">Robust Cybersecurity Systems Tailored to Your Business Needs.</p>
+          <div class="media-corner-br"></div>
         </div>
       </div>
     </div>
-  </div>
-</section>
-<!-- Wrapper Start -->
-<section id="intro">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-7 col-sm-12">
-        <div class="block">
-          <div class="section-title">
-            <h2>About Us</h2>
-            <p>At Facade Pattern, we believe in providing businesses with the tools and security they need to fully harness their digital potential. Our team of experts dedicatedly craft bespoke AI-powered cloud deployment strategies and cybersecurity systems to safeguard, support and catapult your enterprise into the future.</p>
+  </section>
+
+  <!-- ════════════════════════════
+       SECTION 3 — SERVICES OVERVIEW
+  ════════════════════════════ -->
+  <section id="services">
+    <div class="services-inner">
+      <div class="services-header">
+        <div class="section-tag reveal">What We Do</div>
+        <h2 class="reveal reveal-delay-1">Three Pillars.<br /><em>One Trusted Partner.</em></h2>
+      </div>
+
+      <div class="services-grid">
+        <div class="service-card reveal">
+          <div class="service-number">01</div>
+          <svg class="service-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="10" width="36" height="26" rx="3" stroke="currentColor" stroke-width="2"/>
+            <line x1="4" y1="18" x2="40" y2="18" stroke="currentColor" stroke-width="2"/>
+            <circle cx="11" cy="14" r="2" fill="currentColor"/>
+            <circle cx="18" cy="14" r="2" fill="currentColor"/>
+            <path d="M12 26h8M24 26h8M12 32h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <h3>IT Management</h3>
+          <p>Fully managed IT services with proactive monitoring, help desk support, and strategic technology planning tailored to your growth stage.</p>
+        </div>
+
+        <div class="service-card reveal reveal-delay-1">
+          <div class="service-number">02</div>
+          <svg class="service-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22 4L6 10v12c0 9.5 7 18.4 16 20 9-1.6 16-10.5 16-20V10L22 4z" stroke="currentColor" stroke-width="2"/>
+            <path d="M15 22l5 5 9-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <h3>Cybersecurity</h3>
+          <p>Multi-layered defense strategies including threat detection, vulnerability assessments, compliance readiness, and incident response.</p>
+        </div>
+
+        <div class="service-card reveal reveal-delay-2">
+          <div class="service-number">03</div>
+          <svg class="service-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="22" cy="22" r="7" stroke="currentColor" stroke-width="2"/>
+            <path d="M22 4v4M22 36v4M4 22h4M36 22h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M9.4 9.4l2.8 2.8M31.8 31.8l2.8 2.8M31.8 9.4l-2.8 2.8M12.2 31.8l-2.8 2.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <h3>AI &amp; Automation</h3>
+          <p>Intelligent workflows, custom AI integrations, and process automation that cut manual overhead and unlock new operational capacity.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════
+       SECTION 4 — CYBERSECURITY
+  ════════════════════════════ -->
+  <section id="cybersecurity">
+    <div class="split-section">
+      <div class="split-inner reverse">
+        <div class="split-text">
+          <div class="section-tag reveal">Cybersecurity</div>
+          <h2 class="reveal reveal-delay-1">Protect What<br /><em>Matters Most.</em></h2>
+          <p class="section-body reveal reveal-delay-2">
+            Cyber threats don't wait for business hours. We deploy layered defenses tailored for SMBs — giving you enterprise-level protection without the enterprise price tag or complexity.
+          </p>
+          <ul class="feature-list reveal reveal-delay-2">
+            <li>24/7 threat detection &amp; SIEM monitoring</li>
+            <li>Endpoint detection &amp; response (EDR/XDR)</li>
+            <li>Zero-trust network architecture</li>
+            <li>Phishing simulations &amp; security awareness training</li>
+            <li>NIST, SOC 2, HIPAA &amp; compliance advisory</li>
+          </ul>
+          <a href="#contact" class="btn-primary reveal reveal-delay-3">Assess My Risk</a>
+        </div>
+
+        <div class="media-panel reveal reveal-delay-2">
+          <!--
+            Replace with: <img src="assets/cybersecurity.jpg" alt="Cybersecurity" />
+            Or:           <video autoplay muted loop playsinline src="assets/cybersecurity.mp4"></video>
+          -->
+          <div class="placeholder-visual">
+            <div class="grid-lines"></div>
+            <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M40 8L12 18v22c0 17 12.8 32.8 28 36 15.2-3.2 28-19 28-36V18L40 8z" stroke="currentColor" stroke-width="2.5"/>
+              <path d="M28 40l8 8 16-16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
           </div>
-          <p>Our mission is simple – to provide unparalleled service and innovative solutions that keep businesses one step ahead and fully protected against ever-evolving digital threats.</p>
-        </div>
-      </div><!-- .col-md-7 close -->
-      <div class="col-md-5 col-sm-12">
-        <div class="block">
-          <img src="img/wrapper-img.png" alt="Img">
-        </div>
-      </div><!-- .col-md-5 close -->
-    </div>
-  </div>
-</section>
-
-<section id="feature">
-<div class="container">
-  <div class="row">
-    <div class="col-md-6 col-md-offset-6">
-      <h2>WE BELIEVE IN GREAT IDEAS</h2>
-      <p>Bridging the Gap Between Innovations and Security with AI-powered Cloud & Cybersecurity Solutions.</p>
-      <p>Leverage the Power of AI in Fostering Advanced Cybersecurity and Seamless Cloud Solutions.</p>
-      <p>Driving Business Success through AI-fuelled Cloud Operations and Cyber Defense Mechanisms.</p>
-      <!-- <a href="#" class="btn btn-view-works">View Works</a> -->
-    </div>
-  </div>
-</div>
-</section>
-
-<!-- Service Start -->
-<section id="service">
-  <div class="container">
-    <div class="row">
-      <div class="section-title">
-        <h2>Our Services</h2>
-        <p>We provide a robust array of digital solutions, including AI-powered cloud deployment and advanced cybersecurity systems. With our comprehensive consultancy, risk management, and support services, we aim to secure and streamline your digital operations. Our expertise in efficient cloud solutions and resilient cyber protection are designed to foster your business's growth and success in the digital age.</p>
-      </div>
-    </div>
-    <div class="row ">
-      <div class="col-sm-6 col-md-3">
-        <div class="service-item">
-          <i class="icon ion-aperture"></i>
-          <h4>Innovation and Agility</h4>
-          <p>We always keep our sight set on the future, and strive to deliver services that are efficient, adaptable and at the forefront of the industry</p>
-        </div>
-      </div>
-      <div class="col-sm-6 col-md-3">
-        <div class="service-item">
-          <i class="ion-android-people"></i>
-          <h4>Customer Centricity</h4>
-          <p>Our approach revolves around understanding and mapping out our client's journey and strategic vision</p>
-        </div>
-      </div>
-      <div class="col-sm-6 col-md-3">
-        <div class="service-item">
-          <i class="ion-locked"></i>
-          <h4>Robust Security</h4>
-          <p>As a tech company specializing in cybersecurity, our primary focus is to safeguard your digital universe</p>
-        </div>
-      </div>
-      <div class="col-sm-6 col-md-3">
-        <div class="service-item">
-          <i class="ion-earth"></i>
-          <h4>Unmatched Expertise</h4>
-          <p>Our team comprises of highly skilled professionals with years of experience in cloud computing and cybersecurity</p>
+          <div class="media-corner-br"></div>
         </div>
       </div>
     </div>
-  </div>
-</section>
-<!-- Call to action Start -->
-<section id="call-to-action">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="block">
-          <h2>We design delightful digital experiences.</h2>
-          <p>Read more about what we do and our philosophy of design. Judge for yourself The work and results we’ve achieved for other clients, and meet our highly experienced Team who just love to design.</p>
+  </section>
+
+  <!-- ════════════════════════════
+       SECTION 5 — AI & AUTOMATION
+  ════════════════════════════ -->
+  <section id="ai">
+    <div class="split-section">
+      <div class="split-inner">
+        <div class="split-text">
+          <div class="section-tag reveal">AI &amp; Automation</div>
+          <h2 class="reveal reveal-delay-1">Work Smarter.<br /><em>Scale Faster.</em></h2>
+          <p class="section-body reveal reveal-delay-2">
+            We identify repetitive processes eating your team's time and replace them with intelligent, automated workflows — then integrate AI tools that actually fit your business, not a generic template.
+          </p>
+          <ul class="feature-list reveal reveal-delay-2">
+            <li>Business process automation &amp; RPA</li>
+            <li>Custom AI assistant &amp; chatbot integration</li>
+            <li>Data pipeline &amp; analytics automation</li>
+            <li>Microsoft Copilot &amp; AI productivity deployment</li>
+            <li>AI readiness assessment &amp; roadmap planning</li>
+          </ul>
+          <a href="#contact" class="btn-primary reveal reveal-delay-3">Explore AI Solutions</a>
+        </div>
+
+        <div class="media-panel reveal reveal-delay-2">
+          <!--
+            Replace with: <img src="assets/ai-automation.jpg" alt="AI Automation" />
+            Or:           <video autoplay muted loop playsinline src="assets/ai-automation.mp4"></video>
+          -->
+          <div class="placeholder-visual">
+            <div class="grid-lines"></div>
+            <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="40" cy="40" r="12" stroke="currentColor" stroke-width="2.5"/>
+              <path d="M40 10v8M40 62v8M10 40h8M62 40h8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M18.6 18.6l5.6 5.6M55.8 55.8l5.6 5.6M55.8 18.6l-5.6 5.6M24.2 55.8l-5.6 5.6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="media-corner-br"></div>
         </div>
       </div>
     </div>
-  </div>
-</section>
-<!-- Content Start -->
-<section id="testimonial">
-  <div class="container">
-    <div class="row">
-      <div class="section-title text-center">
-        <h2>Fun Facts About Us</h2>
-        <p>We offer managed services to oversee your cloud and cybersecurity operations, allowing you to focus on your core business functions.</p>
+  </section>
+
+  <!-- ════════════════════════════
+       SECTION 6 — WHY US
+  ════════════════════════════ -->
+  <section id="why">
+    <div class="split-section">
+      <div class="split-inner reverse">
+        <div class="split-text">
+          <div class="section-tag reveal">Why Facade Pattern</div>
+          <h2 class="reveal reveal-delay-1">A Partner,<br /><em>Not a Vendor.</em></h2>
+          <p class="section-body reveal reveal-delay-2">
+            Most IT companies sell products. We build long-term strategies. From your first call to your tenth year with us, we stay aligned to your business goals — not a service ticket queue.
+          </p>
+          <ul class="feature-list reveal reveal-delay-2">
+            <li>Dedicated vCIO strategy included in every plan</li>
+            <li>Flat-rate pricing — no surprise invoices</li>
+            <li>U.S.-based team with sub-15-minute response SLAs</li>
+            <li>Proven frameworks for SMB-specific challenges</li>
+            <li>Seamless onboarding — fully operational in 30 days</li>
+          </ul>
+          <a href="#contact" class="btn-primary reveal reveal-delay-3">Start the Conversation</a>
+        </div>
+
+        <div class="media-panel reveal reveal-delay-2">
+          <!--
+            Replace with: <img src="assets/why-facadepattern.jpg" alt="Why Facade Pattern" />
+          -->
+          <div class="placeholder-visual">
+            <div class="grid-lines"></div>
+            <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="32" cy="28" r="10" stroke="currentColor" stroke-width="2.5"/>
+              <path d="M14 64c0-9.9 8.1-18 18-18s18 8.1 18 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M50 22c4.4 1.5 7.5 5.6 7.5 10.5S54.4 42 50 43.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M55 48c5.5 2.5 9 7.7 9 14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="media-corner-br"></div>
+        </div>
       </div>
     </div>
-  </div>
-</section>
-<!-- Content Start -->
-<section id="contact">
-  <div class="container">
-    <div class="row">
-      <div class="section-title text-center">
-        <h2>Contact Us</h2>
-        <script type="text/javascript" src="https://form.jotform.com/jsform/232481900157453"></script>
-        <!-- <p><a href="https://form.jotform.com/232481900157453">Click here to reach out</a></p>-->
+  </section>
+
+  <!-- ════════════════════════════
+       SECTION 7 — CONTACT
+  ════════════════════════════ -->
+  <section id="contact">
+    <div class="contact-inner">
+      <div class="section-tag reveal" style="margin: 0 auto 1.25rem;">Contact Us</div>
+      <h2 class="reveal reveal-delay-1">Ready to Get<br /><em>Started?</em></h2>
+      <p class="section-body reveal reveal-delay-2" style="margin-bottom: 0;">
+        Tell us about your business. A Facade Pattern specialist will reach out within one business day.
+      </p>
+
+      <form class="contact-form reveal reveal-delay-2" id="contact-form" onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="Jane Smith" required />
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone <span style="color:var(--muted);font-weight:300;text-transform:none;letter-spacing:0">(optional)</span></label>
+            <input type="tel" id="phone" name="phone" placeholder="(555) 000-0000" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="jane@company.com" required />
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" placeholder="Tell us about your current challenges or goals..." required></textarea>
+        </div>
+        <div id="form-status" style="display:none;font-size:0.875rem;padding:0.75rem 1rem;border-radius:2px;"></div>
+        <div class="form-submit">
+          <button type="submit" class="btn-primary">Send Message →</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════
+       FOOTER / SITEMAP
+  ════════════════════════════ -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#hero" class="logo">Facade<span>Pattern</span></a>
+        <p>Enterprise-grade IT management, cybersecurity, and AI automation for small and midsize businesses.</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#it-management">IT Management</a></li>
+          <li><a href="#cybersecurity">Cybersecurity</a></li>
+          <li><a href="#ai">AI &amp; Automation</a></li>
+          <li><a href="#services">All Services</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#why">Why Facade Pattern</a></li>
+          <li><a href="#contact">Contact Us</a></li>
+          <li><a href="#hero">Home</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a data-u="hello" data-d="facadepattern.com" href="#" class="email-link">hello&#64;facadepattern.com</a></li>
+          <!-- <li><a href="tel:+18005550100">(800) 555-0100</a></li> -->
+          <li><a href="#contact">Schedule a Call</a></li>
+        </ul>
       </div>
     </div>
-  </div>
-</section>
 
+    <div class="footer-bottom">
+      <p>© 2025 Facade Pattern LLC. All rights reserved.</p>
+      <div class="footer-legal">
+        <a href="#" onclick="openModal('modal-privacy');return false;">Privacy Policy</a>
+        <a href="#" onclick="openModal('modal-tos');return false;">Terms of Service</a>
+      </div>
+    </div>
+  </footer>
 
+  <!-- ══════════════════════════════════════════
+       MODAL — PRIVACY POLICY
+  ══════════════════════════════════════════ -->
+  <div class="modal-overlay" id="modal-privacy" role="dialog" aria-modal="true" aria-labelledby="pp-title">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-header-text">
+          <div class="modal-badge">Legal Document</div>
+          <div class="modal-title" id="pp-title">Privacy Policy</div>
+          <div class="modal-meta">Facade Pattern LLC &nbsp;·&nbsp; Effective: January 1, 2025 &nbsp;·&nbsp; Version 1.0</div>
+        </div>
+        <button class="modal-close" onclick="closeModal('modal-privacy')" aria-label="Close">✕</button>
+      </div>
 
+      <div class="modal-body">
+        <div class="modal-toc">
+          <div class="modal-toc-title">Contents</div>
+          <ol>
+            <li><a href="#pp-1">Information We Collect</a></li>
+            <li><a href="#pp-2">How We Use Your Information</a></li>
+            <li><a href="#pp-3">Legal Basis for Processing</a></li>
+            <li><a href="#pp-4">Sharing & Disclosure</a></li>
+            <li><a href="#pp-5">Data Retention</a></li>
+            <li><a href="#pp-6">Your Rights</a></li>
+            <li><a href="#pp-7">Cookies & Tracking</a></li>
+            <li><a href="#pp-8">International Transfers</a></li>
+            <li><a href="#pp-9">Security</a></li>
+            <li><a href="#pp-10">Children's Privacy</a></li>
+            <li><a href="#pp-11">Changes to This Policy</a></li>
+            <li><a href="#pp-12">Contact</a></li>
+          </ol>
+        </div>
 
+        <div class="modal-highlight">
+          <strong>Summary:</strong> We collect only what we need to provide our services and communicate with you. We do not sell your data. You have the right to access, correct, or delete your information at any time.
+        </div>
 
+        <div class="modal-section" id="pp-1">
+          <div class="modal-section-title">1. Information We Collect</div>
+          <p><strong>Information you provide directly:</strong> When you submit our contact form, request a consultation, or communicate with us, we collect your name, email address, phone number, company name, job title, and any details you include in your message.</p>
+          <p><strong>Information collected automatically:</strong> When you visit our website, we may collect your IP address, browser type and version, operating system, referring URLs, pages visited, and timestamps of activity through server logs and analytics tools.</p>
+          <p><strong>Communications data:</strong> If you correspond with us by email or phone, we retain records of that communication to provide consistent service and maintain accurate business records.</p>
+        </div>
 
-
-
-
-
-
-    <!-- footer Start -->
-<footer>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="footer-manu">
+        <div class="modal-section" id="pp-2">
+          <div class="modal-section-title">2. How We Use Your Information</div>
+          <p>We use the information we collect for the following purposes:</p>
           <ul>
-            <li><a href="#intro">About Us</a></li>
-            <li><a href="#service">Services</a></li>
-            <li><a href="#contact">Contact Us</a></li>
+            <li>Responding to inquiries and consultation requests</li>
+            <li>Providing, managing, and improving our IT management, cybersecurity, and AI automation services</li>
+            <li>Sending service updates, security alerts, and administrative communications</li>
+            <li>Sending marketing communications where you have opted in or where permitted by applicable law</li>
+            <li>Analyzing website usage to improve functionality and user experience</li>
+            <li>Complying with legal obligations and enforcing our agreements</li>
+            <li>Protecting the security and integrity of our systems and services</li>
+          </ul>
+          <p>We will never use your information for purposes incompatible with those disclosed at the time of collection without your prior consent.</p>
+        </div>
+
+        <div class="modal-section" id="pp-3">
+          <div class="modal-section-title">3. Legal Basis for Processing (GDPR)</div>
+          <p>For individuals located in the European Economic Area or United Kingdom, our legal bases for processing personal data are:</p>
+          <ul>
+            <li><strong>Consent (Art. 6(1)(a)):</strong> Where you have given clear consent, such as subscribing to marketing communications.</li>
+            <li><strong>Contract (Art. 6(1)(b)):</strong> Where processing is necessary to fulfill a service agreement or respond to a pre-contractual request.</li>
+            <li><strong>Legal Obligation (Art. 6(1)(c)):</strong> Where processing is required to comply with applicable law.</li>
+            <li><strong>Legitimate Interests (Art. 6(1)(f)):</strong> Where we have a legitimate business interest, such as improving our website and preventing fraud, provided your rights are not overridden.</li>
           </ul>
         </div>
-        <p>Copyright &copy; Design &amp; Developed by <a href="http://www.themefisher.com">Themefisher</a>. All rights reserved.</p>
+
+        <div class="modal-section" id="pp-4">
+          <div class="modal-section-title">4. Sharing & Disclosure</div>
+          <p>We do not sell, rent, or trade your personal information to third parties for their own marketing purposes. We may share your information only in the following circumstances:</p>
+          <ul>
+            <li><strong>Service providers:</strong> Trusted vendors who assist us in operating our website and delivering services (e.g., hosting, CRM, email delivery, analytics). These providers are contractually bound to process data only on our instructions.</li>
+            <li><strong>Legal requirements:</strong> When disclosure is required by law, court order, subpoena, or governmental authority, or to protect our legal rights or the safety of others.</li>
+            <li><strong>Business transfers:</strong> In connection with a merger, acquisition, or sale of assets, your information may be transferred as part of that transaction. We will notify you via email and/or prominent website notice before your information becomes subject to a different privacy policy.</li>
+            <li><strong>With your consent:</strong> For any other purpose with your explicit consent.</li>
+          </ul>
+        </div>
+
+        <div class="modal-section" id="pp-5">
+          <div class="modal-section-title">5. Data Retention</div>
+          <p>We retain personal data only as long as necessary for the purposes described in this policy or as required by law. Specifically:</p>
+          <ul>
+            <li><strong>Contact and inquiry records:</strong> Retained for up to 3 years from last interaction to support potential or ongoing business relationships.</li>
+            <li><strong>Client service records:</strong> Retained for the duration of the client relationship plus 7 years to comply with contractual and legal obligations.</li>
+            <li><strong>Marketing consent records:</strong> Retained for the duration of the subscription plus 5 years to demonstrate compliance.</li>
+            <li><strong>Website analytics:</strong> Aggregated data retained for up to 24 months; raw log data retained for up to 12 months.</li>
+          </ul>
+          <p>When data is no longer needed, it is securely deleted or anonymized.</p>
+        </div>
+
+        <div class="modal-section" id="pp-6">
+          <div class="modal-section-title">6. Your Rights</div>
+          <p>Depending on your location, you may have the following rights regarding your personal data. To exercise any right, contact us at <strong>privacy&#64;facadepattern&#46;com</strong>. We will respond within 30 days.</p>
+          <ul>
+            <li><strong>Access:</strong> Request a copy of the personal data we hold about you.</li>
+            <li><strong>Rectification:</strong> Request correction of inaccurate or incomplete data.</li>
+            <li><strong>Erasure:</strong> Request deletion of your data where it is no longer necessary or where you withdraw consent.</li>
+            <li><strong>Restriction:</strong> Request that we limit processing in certain circumstances.</li>
+            <li><strong>Portability:</strong> Receive your data in a structured, machine-readable format (GDPR).</li>
+            <li><strong>Objection:</strong> Object to processing based on legitimate interests, including direct marketing.</li>
+            <li><strong>Withdraw Consent:</strong> Withdraw consent at any time without penalty. This does not affect prior lawful processing.</li>
+            <li><strong>CCPA (California):</strong> Right to know, delete, opt out of sale, and non-discrimination.</li>
+          </ul>
+          <p>You have the right to lodge a complaint with your national data protection authority if you believe your rights have been violated.</p>
+        </div>
+
+        <div class="modal-section" id="pp-7">
+          <div class="modal-section-title">7. Cookies & Tracking Technologies</div>
+          <p>Our website may use cookies and similar tracking technologies to improve functionality and analyze usage. Types of cookies we may use:</p>
+          <ul>
+            <li><strong>Essential cookies:</strong> Necessary for the website to function properly. Cannot be disabled.</li>
+            <li><strong>Analytics cookies:</strong> Help us understand how visitors interact with the site. We use privacy-respecting analytics tools that do not track individuals across sites.</li>
+            <li><strong>Marketing cookies:</strong> Used only with your explicit consent to measure the effectiveness of our communications.</li>
+          </ul>
+          <p>You can control cookie preferences through your browser settings. Disabling certain cookies may affect website functionality. Where required by law (e.g., EU ePrivacy Directive), we obtain consent before placing non-essential cookies.</p>
+        </div>
+
+        <div class="modal-section" id="pp-8">
+          <div class="modal-section-title">8. International Data Transfers</div>
+          <p>Facade Pattern LLC is based in the United States. If you are located outside the US, your personal data may be transferred to and processed in the United States. Where required by applicable law, we ensure appropriate safeguards are in place including Standard Contractual Clauses (SCCs) approved by the European Commission, UK International Data Transfer Agreements (IDTAs), or other lawful mechanisms.</p>
+        </div>
+
+        <div class="modal-section" id="pp-9">
+          <div class="modal-section-title">9. Security</div>
+          <p>We implement industry-standard technical and organizational security measures to protect your personal data against unauthorized access, disclosure, alteration, or destruction. These include encrypted data transmission (TLS), access controls, regular security assessments, and employee training on data handling.</p>
+          <p>No method of transmission over the internet is 100% secure. While we strive to protect your information, we cannot guarantee absolute security. In the event of a data breach that poses a risk to your rights, we will notify you and relevant authorities as required by applicable law.</p>
+        </div>
+
+        <div class="modal-section" id="pp-10">
+          <div class="modal-section-title">10. Children's Privacy</div>
+          <p>Our services are directed at business professionals and are not intended for individuals under the age of 16. We do not knowingly collect personal data from minors. If you believe we have inadvertently collected data from a minor, please contact us at <strong>privacy&#64;facadepattern&#46;com</strong> and we will delete it promptly.</p>
+        </div>
+
+        <div class="modal-section" id="pp-11">
+          <div class="modal-section-title">11. Changes to This Policy</div>
+          <p>We may update this Privacy Policy periodically to reflect changes in our practices or legal requirements. When material changes are made, we will update the effective date and, where required by law, notify you by email or prominent website notice. Continued use of our website or services after notification constitutes acceptance of the updated policy.</p>
+        </div>
+
+        <div class="modal-section" id="pp-12">
+          <div class="modal-section-title">12. Contact Us</div>
+          <p>For questions, concerns, or to exercise your data rights, please contact:</p>
+          <div class="modal-highlight">
+            <strong>Facade Pattern LLC</strong><br />
+            Privacy &amp; Data Officer: privacy&#64;facadepattern&#46;com<br />
+            General Inquiries: hello&#64;facadepattern&#46;com<br />
+            <!--
+            Phone: [Business Phone]<br />
+            Address: [Your Business Address]
+            -->
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <p>Last reviewed: January 1, 2025 &nbsp;·&nbsp; Version 1.0</p>
+        <button class="btn-primary" onclick="closeModal('modal-privacy')">Close</button>
       </div>
     </div>
   </div>
-</footer>
 
+  <!-- ══════════════════════════════════════════
+       MODAL — TERMS OF SERVICE
+  ══════════════════════════════════════════ -->
+  <div class="modal-overlay" id="modal-tos" role="dialog" aria-modal="true" aria-labelledby="tos-title">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-header-text">
+          <div class="modal-badge">Legal Document</div>
+          <div class="modal-title" id="tos-title">Terms of Service</div>
+          <div class="modal-meta">Facade Pattern LLC &nbsp;·&nbsp; Effective: January 1, 2025 &nbsp;·&nbsp; Version 1.0</div>
+        </div>
+        <button class="modal-close" onclick="closeModal('modal-tos')" aria-label="Close">✕</button>
+      </div>
 
-    </body>
+      <div class="modal-body">
+        <div class="modal-toc">
+          <div class="modal-toc-title">Contents</div>
+          <ol>
+            <li><a href="#tos-1">Acceptance of Terms</a></li>
+            <li><a href="#tos-2">Services Description</a></li>
+            <li><a href="#tos-3">Eligibility</a></li>
+            <li><a href="#tos-4">Service Agreements & Scope</a></li>
+            <li><a href="#tos-5">Fees & Payment</a></li>
+            <li><a href="#tos-6">Acceptable Use</a></li>
+            <li><a href="#tos-7">Intellectual Property</a></li>
+            <li><a href="#tos-8">Confidentiality</a></li>
+            <li><a href="#tos-9">Disclaimer of Warranties</a></li>
+            <li><a href="#tos-10">Limitation of Liability</a></li>
+            <li><a href="#tos-11">Indemnification</a></li>
+            <li><a href="#tos-12">Term & Termination</a></li>
+            <li><a href="#tos-13">Governing Law & Disputes</a></li>
+            <li><a href="#tos-14">Changes to Terms</a></li>
+            <li><a href="#tos-15">Contact</a></li>
+          </ol>
+        </div>
+
+        <div class="modal-highlight">
+          <strong>Please read carefully.</strong> By accessing our website or engaging Facade Pattern LLC for services, you agree to these Terms of Service. If you do not agree, do not use our website or services.
+        </div>
+
+        <div class="modal-section" id="tos-1">
+          <div class="modal-section-title">1. Acceptance of Terms</div>
+          <p>These Terms of Service ("Terms") constitute a legally binding agreement between you ("Client," "you," or "your") and Facade Pattern LLC ("Facade Pattern," "we," "our," or "us"), governing your access to and use of our website located at [www.facadepattern.com] (the "Site") and any managed IT services, cybersecurity services, or AI automation services we provide (collectively, the "Services").</p>
+          <p>By accessing our Site, submitting an inquiry, executing a service agreement, or otherwise engaging our Services, you acknowledge that you have read, understood, and agree to be bound by these Terms and our Privacy Policy, which is incorporated herein by reference.</p>
+        </div>
+
+        <div class="modal-section" id="tos-2">
+          <div class="modal-section-title">2. Services Description</div>
+          <p>Facade Pattern LLC provides technology services to small and midsize businesses, including but not limited to:</p>
+          <ul>
+            <li><strong>IT Management:</strong> Managed help desk, network monitoring, infrastructure management, cloud services, backup and disaster recovery, and vendor management.</li>
+            <li><strong>Cybersecurity:</strong> Threat detection and monitoring, endpoint protection, vulnerability assessments, security awareness training, incident response, and compliance advisory services.</li>
+            <li><strong>AI &amp; Automation:</strong> Business process automation, AI tool integration, workflow design, and technology roadmap planning.</li>
+          </ul>
+          <p>The specific scope, deliverables, service levels, and pricing for any engagement are defined in a separate Master Service Agreement (MSA) and/or Statement of Work (SOW) executed between Facade Pattern and the Client. In the event of conflict, the executed MSA/SOW takes precedence over these Terms.</p>
+        </div>
+
+        <div class="modal-section" id="tos-3">
+          <div class="modal-section-title">3. Eligibility</div>
+          <p>Our Services are intended for business entities and professionals. By agreeing to these Terms, you represent that: (a) you are at least 18 years of age; (b) you have the legal authority to bind your organization to these Terms; and (c) your use of our Services does not violate any applicable laws or regulations in your jurisdiction.</p>
+        </div>
+
+        <div class="modal-section" id="tos-4">
+          <div class="modal-section-title">4. Service Agreements & Scope of Work</div>
+          <p>All managed services, project engagements, and professional services are governed by a written service agreement signed by both parties. No verbal commitments, informal communications, or website content shall constitute a binding service commitment. Services commence only upon execution of a written agreement and receipt of any required initial payment.</p>
+          <p>Facade Pattern reserves the right to modify, suspend, or discontinue any service offering at any time with reasonable prior notice to existing clients under active agreements.</p>
+        </div>
+
+        <div class="modal-section" id="tos-5">
+          <div class="modal-section-title">5. Fees & Payment</div>
+          <p>Fees for Services are set forth in the applicable service agreement or SOW. Unless otherwise specified:</p>
+          <ul>
+            <li>Monthly managed service fees are invoiced in advance and due within 15 days of invoice date.</li>
+            <li>Project and professional services fees are invoiced per the payment schedule in the applicable SOW.</li>
+            <li>Late payments are subject to interest at 1.5% per month (or the maximum permitted by law, whichever is less).</li>
+            <li>Facade Pattern reserves the right to suspend Services for accounts more than 30 days past due after written notice.</li>
+            <li>All fees are exclusive of applicable taxes, which are the Client's responsibility unless Facade Pattern is legally obligated to collect and remit.</li>
+          </ul>
+        </div>
+
+        <div class="modal-section" id="tos-6">
+          <div class="modal-section-title">6. Acceptable Use</div>
+          <p>You agree not to use our website or Services to:</p>
+          <ul>
+            <li>Violate any applicable local, state, national, or international laws or regulations</li>
+            <li>Transmit, distribute, or store material that infringes intellectual property rights or contains unlawful content</li>
+            <li>Engage in unauthorized access to computer systems, networks, or data</li>
+            <li>Introduce malware, viruses, or other harmful code into any system</li>
+            <li>Attempt to probe, scan, or test the vulnerability of any system without explicit written authorization</li>
+            <li>Interfere with or disrupt the integrity or performance of our Services or third-party systems</li>
+            <li>Misrepresent your identity or affiliation</li>
+          </ul>
+          <p>Violation of these acceptable use provisions may result in immediate suspension or termination of Services without refund and may subject you to legal liability.</p>
+        </div>
+
+        <div class="modal-section" id="tos-7">
+          <div class="modal-section-title">7. Intellectual Property</div>
+          <p><strong>Facade Pattern's IP:</strong> All content on this Site, including text, graphics, logos, and software, and all proprietary tools, methodologies, templates, and processes developed by Facade Pattern, are and remain the sole property of Facade Pattern LLC. Nothing in these Terms grants you any license to use Facade Pattern's intellectual property except as expressly needed to receive the Services.</p>
+          <p><strong>Client's IP:</strong> You retain all ownership rights to your data, systems, configurations, and pre-existing intellectual property. By engaging our Services, you grant Facade Pattern a limited, non-exclusive license to access and use your systems and data solely as necessary to deliver the contracted Services.</p>
+          <p><strong>Work Product:</strong> Ownership of custom deliverables (e.g., custom-developed software, automation workflows) is specified in the applicable SOW. In the absence of specific terms, work product developed solely for a Client using Client data and credentials is owned by the Client upon full payment.</p>
+        </div>
+
+        <div class="modal-section" id="tos-8">
+          <div class="modal-section-title">8. Confidentiality</div>
+          <p>Each party agrees to hold the other's Confidential Information in strict confidence, using at least the same degree of care used to protect its own confidential information (no less than reasonable care). "Confidential Information" means non-public information designated as confidential or that a reasonable person would understand to be confidential given the context.</p>
+          <p>Confidentiality obligations do not apply to information that: (a) is or becomes publicly known through no breach of this agreement; (b) was rightfully known before disclosure; (c) is independently developed without use of confidential information; or (d) is required to be disclosed by law or court order, provided the disclosing party gives prompt prior written notice where legally permitted.</p>
+          <p>Confidentiality obligations survive termination of the service relationship for a period of three (3) years, or indefinitely for trade secrets.</p>
+        </div>
+
+        <div class="modal-section" id="tos-9">
+          <div class="modal-section-title">9. Disclaimer of Warranties</div>
+          <p>THE SITE AND SERVICES ARE PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED. TO THE FULLEST EXTENT PERMITTED BY APPLICABLE LAW, FACADE PATTERN DISCLAIMS ALL WARRANTIES, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.</p>
+          <p>FACADE PATTERN DOES NOT WARRANT THAT THE SERVICES WILL BE UNINTERRUPTED, ERROR-FREE, OR COMPLETELY SECURE. CYBERSECURITY SERVICES REDUCE RISK BUT CANNOT GUARANTEE THAT SECURITY INCIDENTS WILL NOT OCCUR. THE CLIENT ACKNOWLEDGES THAT NO SECURITY SOLUTION IS ABSOLUTE.</p>
+        </div>
+
+        <div class="modal-section" id="tos-10">
+          <div class="modal-section-title">10. Limitation of Liability</div>
+          <p>TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL FACADE PATTERN LLC, ITS OFFICERS, DIRECTORS, EMPLOYEES, OR AGENTS BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING WITHOUT LIMITATION LOST PROFITS, LOST DATA, BUSINESS INTERRUPTION, OR LOSS OF GOODWILL, ARISING OUT OF OR IN CONNECTION WITH THESE TERMS OR THE SERVICES.</p>
+          <p>FACADE PATTERN'S TOTAL CUMULATIVE LIABILITY TO YOU FOR ALL CLAIMS ARISING OUT OF OR RELATED TO A SERVICE ENGAGEMENT SHALL NOT EXCEED THE TOTAL FEES PAID BY YOU TO FACADE PATTERN IN THE THREE (3) MONTHS IMMEDIATELY PRECEDING THE CLAIM.</p>
+          <p>Some jurisdictions do not allow the exclusion of certain warranties or limitation of liability. In such cases, Facade Pattern's liability is limited to the fullest extent permitted by applicable law.</p>
+        </div>
+
+        <div class="modal-section" id="tos-11">
+          <div class="modal-section-title">11. Indemnification</div>
+          <p>You agree to indemnify, defend, and hold harmless Facade Pattern LLC and its officers, directors, employees, and agents from and against any claims, liabilities, damages, losses, costs, and expenses (including reasonable legal fees) arising out of or in connection with: (a) your breach of these Terms; (b) your violation of any applicable law or third-party rights; (c) your use of the Services in a manner not authorized by Facade Pattern; or (d) any data or content you provide to Facade Pattern in connection with the Services.</p>
+        </div>
+
+        <div class="modal-section" id="tos-12">
+          <div class="modal-section-title">12. Term & Termination</div>
+          <p>These Terms remain in effect while you access our Site or engage our Services. Service agreements have specific terms set forth in the applicable MSA or SOW.</p>
+          <p>Either party may terminate a service agreement with written notice as specified in that agreement. Facade Pattern may terminate or suspend access to Services immediately and without prior notice if you: (a) materially breach these Terms and fail to cure within 10 days of written notice; (b) become insolvent or file for bankruptcy; or (c) engage in conduct that poses a security or legal risk to Facade Pattern or other clients.</p>
+          <p>Upon termination, your right to use the Services ceases. You remain liable for all fees incurred through the effective termination date. Sections 7 (IP), 8 (Confidentiality), 9 (Disclaimers), 10 (Liability), 11 (Indemnification), and 13 (Governing Law) survive termination.</p>
+        </div>
+
+        <div class="modal-section" id="tos-13">
+          <div class="modal-section-title">13. Governing Law & Dispute Resolution</div>
+          <p>These Terms are governed by and construed in accordance with the laws of the State of [Your State], without regard to conflict of law principles. Any dispute arising from these Terms or the Services that cannot be resolved informally shall be submitted to binding arbitration administered by JAMS under its Commercial Arbitration Rules, with proceedings conducted in [Your City, State]. Judgment on the arbitration award may be entered in any court of competent jurisdiction.</p>
+          <p>Notwithstanding the foregoing, either party may seek injunctive or other equitable relief in any court of competent jurisdiction to prevent irreparable harm. The parties waive the right to a jury trial and the right to participate in class action proceedings.</p>
+        </div>
+
+        <div class="modal-section" id="tos-14">
+          <div class="modal-section-title">14. Changes to These Terms</div>
+          <p>Facade Pattern reserves the right to modify these Terms at any time. When material changes are made, we will update the effective date and provide notice via email or a prominent notice on our Site at least 14 days before the changes take effect. Your continued use of our Site or Services after that date constitutes acceptance of the revised Terms. If you do not agree, you must cease using the Site and Services and notify us of your intent to terminate any active service agreements.</p>
+        </div>
+
+        <div class="modal-section" id="tos-15">
+          <div class="modal-section-title">15. Contact Us</div>
+          <p>For questions regarding these Terms, please contact:</p>
+          <div class="modal-highlight">
+            <strong>Facade Pattern LLC</strong><br />
+            Legal &amp; Compliance: legal&#64;facadepattern&#46;com<br />
+            General Inquiries: hello&#64;facadepattern&#46;com<br />
+            <!--
+            Phone: [Business Phone]<br />
+            Address: [Your Business Address]
+            -->
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <p>Last reviewed: January 1, 2025 &nbsp;·&nbsp; Version 1.0</p>
+        <button class="btn-primary" onclick="closeModal('modal-tos')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SCRIPTS ── -->
+  <script>
+    // Nav scroll state
+    const nav = document.getElementById('main-nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    // Intersection Observer for reveal animations
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    revealEls.forEach(el => observer.observe(el));
+
+    // Smooth scroll for all anchor links (skip modal-internal anchors)
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+        // Let modal TOC links scroll inside the modal body — don't intercept
+        if (this.closest('.modal-toc')) return;
+        const target = document.querySelector(href);
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+
+    async function handleSubmit(e) {
+      e.preventDefault();
+      const form = e.target;
+      const btn = form.querySelector('button[type="submit"]');
+      const status = document.getElementById('form-status');
+
+      btn.textContent = 'Sending…';
+      btn.disabled = true;
+      status.style.display = 'none';
+
+      try {
+        const res = await fetch('https://formspree.io/f/xkokryve', {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        });
+
+        if (res.ok) {
+          form.reset();
+          btn.textContent = '✓ Message Sent!';
+          btn.style.background = '#0a9b6e';
+          status.textContent = 'Thanks! We\'ll be in touch within one business day.';
+          status.style.cssText = 'display:block;background:rgba(10,155,110,0.1);border:1px solid rgba(10,155,110,0.3);color:#0a9b6e;font-size:0.875rem;padding:0.75rem 1rem;border-radius:2px;';
+        } else {
+          const data = await res.json();
+          throw new Error(data.errors?.map(e => e.message).join(', ') || 'Submission failed');
+        }
+      } catch (err) {
+        btn.textContent = 'Send Message →';
+        btn.disabled = false;
+        status.textContent = 'Something went wrong. Please try again or email us directly.';
+        status.style.cssText = 'display:block;background:rgba(220,50,50,0.1);border:1px solid rgba(220,50,50,0.3);color:#e06060;font-size:0.875rem;padding:0.75rem 1rem;border-radius:2px;';
+      }
+    }
+
+    // ── Modal helpers ──
+    function openModal(id) {
+      const overlay = document.getElementById(id);
+      if (!overlay) return;
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      // Reset scroll inside modal body
+      const body = overlay.querySelector('.modal-body');
+      if (body) body.scrollTop = 0;
+      // Focus close button for accessibility
+      const closeBtn = overlay.querySelector('.modal-close');
+      if (closeBtn) closeBtn.focus();
+    }
+
+    function closeModal(id) {
+      const overlay = document.getElementById(id);
+      if (!overlay) return;
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // Close modal on overlay click (outside modal card)
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', function(e) {
+        if (e.target === this) closeModal(this.id);
+      });
+    });
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.open').forEach(o => closeModal(o.id));
+      }
+    });
+
+    // Assemble mailto links from data attributes to prevent bot scraping
+    document.querySelectorAll('a.email-link[data-u][data-d]').forEach(a => {
+      const addr = a.dataset.u + '@' + a.dataset.d;
+      a.href = 'mailto:' + addr;
+      a.textContent = addr;
+    });
+
+    // Modal internal TOC anchor scrolling
+    document.querySelectorAll('.modal-toc a').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href').slice(1);
+        const modalBody = this.closest('.modal-overlay').querySelector('.modal-body');
+        const target = modalBody.querySelector('#' + targetId);
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  </script>
+</body>
 </html>
